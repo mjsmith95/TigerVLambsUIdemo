@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-public class UIController : GameController
+public class UIController : MonoBehaviour
 {
     public Text[] girdSpaceList;
     string gameOverText;
- 
+    public Dictionary<Text, int[]> board;
 
-    private Dictionary<Text,int[]> SetUI(Text[] UIElements)
+    public Dictionary<Text,int[]> SetUI(Text[] UIElements)
     {
         Dictionary<Text, int[]> boardUIMapping = new Dictionary<Text, int[]>();
 
@@ -37,9 +37,13 @@ public class UIController : GameController
         boardUIMapping.Add(UIElements[22], new int[] { 2, 0, 0 });
         boardUIMapping.Add(UIElements[23], new int[] { 3, 0, 0 });
         boardUIMapping.Add(UIElements[24], new int[] { 4, 0, 1 });
+
+        board = boardUIMapping;
+
         return boardUIMapping;
     }
-    private void OnStart(Text[] UIElements)
+
+    public void OnStart(Text[] UIElements)
     {
 
         Dictionary<Text,int[]> startBoard =  SetUI(UIElements);
@@ -51,8 +55,26 @@ public class UIController : GameController
             }
         }
     }
+
+    public void UpdateBaord(Dictionary<Text,int[]> currentBoard)
+    {
+
+        foreach (KeyValuePair<Text, int[]> boardPos in currentBoard)
+        {
+            if (boardPos.Value[2] == 1)
+            {
+                boardPos.Key.text = "T";
+            }
+            else if (boardPos.Value[2] == 2)
+            {
+                boardPos.Key.text = "S";
+            }
+        }
+    }
+
     void Start()
     {
+        Debug.Log("the size on start is " + girdSpaceList.Length);
         OnStart(girdSpaceList);
 
     }
