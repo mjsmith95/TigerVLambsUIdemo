@@ -7,7 +7,8 @@ public class UIController : MonoBehaviour
     public Text[] girdSpaceList;
     string gameOverText;
     public Dictionary<Text, int[]> board;
-
+    public Text currentPressed;
+    public Text lastPressed;
     public Dictionary<Text,int[]> SetUI(Text[] UIElements)
     {
         Dictionary<Text, int[]> boardUIMapping = new Dictionary<Text, int[]>();
@@ -58,18 +59,24 @@ public class UIController : MonoBehaviour
 
     public void UpdateBaord(Dictionary<Text,int[]> currentBoard)
     {
-
-        foreach (KeyValuePair<Text, int[]> boardPos in currentBoard)
+        
+        if (currentBoard[lastPressed][2] == 1)
         {
-            if (boardPos.Value[2] == 1)
-            {
-                boardPos.Key.text = "T";
-            }
-            else if (boardPos.Value[2] == 2)
-            {
-                boardPos.Key.text = "S";
-            }
+            currentPressed.text = "T";
+            currentBoard[currentPressed][2] = 1;
         }
+        else if (currentBoard[lastPressed][2] == 2)
+        {
+            currentPressed.text = "S";
+            currentBoard[currentPressed][2] = 2;
+        }
+        else
+        {
+            currentPressed.text = "";
+            currentBoard[currentPressed][2] = 0;
+
+        }
+        lastPressed = currentPressed; 
     }
 
     void Start()

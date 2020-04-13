@@ -7,13 +7,16 @@ public class GridSpace : UIController
 {
     public Button button;
     public Text buttonText;
-    public string playerSide;
-    string gridSpaceName;
-    public int[] lastClickedPiece;
-
     public void SetSpace()
     {
-        Debug.Log("board obj test " + board[buttonText]);
+        currentPressed = buttonText;
+        UpdateBaord(board);  
+        Debug.Log("This button's tect is: " + buttonText.text );
+
+     //   lastPressed = buttonText;
+        
+        /*
+        Debug.Log(buttonText);
         string currentButtonName = this.button.name;
         int[] currentPeiceType = board[buttonText];
         buttonText.text = "";
@@ -35,6 +38,6 @@ public class GridSpace : UIController
         Debug.Log("The last clicked piece type was " + lastClickedPiece[2]);
         Debug.Log("The current selected button's name is "+button.name);
         lastClickedPiece = currentPeiceType;
-
-    }
+        */    
+    } 
 }
