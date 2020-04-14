@@ -2,18 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PieceInterface : MonoBehaviour
+public class Piece:MonoBehaviour 
 {
-    string pieceType;
-    string id;
-    int xCord;
-    int yCord;
-    bool inPlay;
-    int boardPos;
+    public string pieceID;
+    public string pieceType; 
+    public bool inPlay;
+    public int[] currnetPos;
 
-    public int BoardPos { get => boardPos; set => boardPos = value; } 
-    public bool InPlay { get => inPlay; set => InPlay = value; }
-    public string ID { get => id; set => id = value; }
-    public string PieceType { get => pieceType; set => pieceType = value; }
-
+    void SetBoardPos(int[] newCord)
+    {
+        currnetPos = newCord; 
+    }
+    void ChangeStatus()
+    {
+        inPlay = !inPlay; 
+    } 
 }
