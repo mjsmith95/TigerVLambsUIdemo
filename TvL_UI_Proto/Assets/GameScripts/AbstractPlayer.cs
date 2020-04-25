@@ -2,12 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Player : MonoBehaviour
+public abstract class Player
 {
     string name; // player name 
     string playerType; // human or AI players 
     string pieceType; // Tiger of lamb piece obj 
-    List<object> pieces; // list used to store pieces 
 
     //method will be same for all needs to be implemented once board and pieces are created
     public abstract bool IsValidMove(int x,int y, List<List<object>> board);

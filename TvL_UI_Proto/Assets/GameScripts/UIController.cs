@@ -10,7 +10,7 @@ public class UIController : MonoBehaviour
     public void BoardSetup()
     {
         GameObject tigerOne = (GameObject)Instantiate(Resources.Load("TigerPiece")); 
-        tigerOne.
+        tigerOne. 
 
     }
 
