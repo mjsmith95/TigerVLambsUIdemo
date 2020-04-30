@@ -2,11 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class GameController : MonoBehaviour
 {
+    public int turnCount = 0;
+    public int selectorVal = 0;
+    public bool isSheepTurn = false;
     public List<Button> buttons;
-    public Dictionary<int[], string> grid;
+    public Dictionary<Button, int[]> grid = new Dictionary<Button, int[]>();
     public void BoardSetup(List<Button> buttonElments)
     {
         int count = 0;
@@ -21,20 +25,66 @@ public class GameController : MonoBehaviour
                     //update the value in the dict 
                     buttonElments[count].GetComponentInChildren<Text>().text = "T";
                 }
-                int[] cord = {x,y};
-                string bName = buttonElments[count].name;
-
-                Debug.Log(bName);
-
-               // grid.Add(cord, bName);
+                int[] cord = { x, y };
+                grid.Add(buttonElments[count], cord);
                 count += 1;
                 Debug.Log("x: " + x + " y: " + y);
-            }     
+            }
         }
     }
+
+    public void GetLastPressedButton()
+    {
+        
+        Debug.Log(EventSystem.current.currentSelectedGameObject.name);
+        Debug.Log(grid[]);
+    }
+
+    public void UpdateGame()
+    {
+        if (isSheepTurn)
+        {
+            if (turnCount <= 20)
+            {
+                //place a sheep onto the board
+            }
+            else
+            {
+                //move an exsiting sheep on the baord 
+            }
+        }
+        //otherwsie a tiger is in play and should be moved
+        else
+        {
+
+        }
+
+    }
+    //checks the current to determine which piece is in play 
+    public void playerTurn(int currentTurn)
+    {
+        //if the turn is even then it's a tiger turn
+        if(currentTurn % 2 == 0 || currentTurn == 0)
+        {
+            isSheepTurn =false;
+        }
+        // otherwise its the sheep's turn 
+        else
+        {
+            isSheepTurn = true;
+        }
+    }
+
+    public List<int[]> getValidMoves()
+    {
+        List<int[]> validMoves = new List<int[]>();
+        return validMoves; 
+    }
+
     void Awake()
     {
         Debug.Log("list is size is " + buttons.Count);
         BoardSetup(buttons);
+        Debug.Log("dict test " + grid.Count);
     }
 }
