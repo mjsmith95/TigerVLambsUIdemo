@@ -81,7 +81,7 @@ public class GameController : MonoBehaviour
         List<Button> potentialMoves = new List<Button>();
         if (actionCount == 0)
         {
-            if (!CheckIfEmpty(currentPressed))
+            if (!CheckIfEmpty(currentPressed)) 
             {
                 firstPressed = currentPressed;
                 potentialMoves = GetValidMoves(firstPressed);
