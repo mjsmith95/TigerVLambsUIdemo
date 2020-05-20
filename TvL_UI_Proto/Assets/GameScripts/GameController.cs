@@ -44,10 +44,10 @@ public class GameController : MonoBehaviour
     {
         Button currentPressed = EventSystem.current.currentSelectedGameObject.GetComponent<Button>();
         //int[] cord = grid[EventSystem.current.currentSelectedGameObject.name];
-        Debug.Log("The current turn is " + currentTurn);
+        //Debug.Log("The current turn is " + currentTurn);
         if (currentTurn < 40 && isSheepTurn)
         {
-            Debug.Log("Placement for Lamb");
+            //Debug.Log("Placement for Lamb");
             if (CheckIfEmpty(currentPressed))
             {
                 currentPressed.GetComponentInChildren<Text>().text = "L";
@@ -97,19 +97,20 @@ public class GameController : MonoBehaviour
         }
         else if (actionCount == 1)
         {
-            if (CheckIfEmpty(currentPressed)) // and is valid move ... still need to write that YIKES
+            if (CheckIfEmpty(currentPressed)) 
             {
-                // move the piece to the current selection
                 currentPressed.GetComponentInChildren<Text>().text = firstPressed.GetComponentInChildren<Text>().text;
                 // remove that same piece from the previous seelction
                 firstPressed.GetComponentInChildren<Text>().text = "";
+
                 for (int i = 0; i < potentialMoves.Count; i++)
                 {
                     //redo color code 
                     ColorBlock cb = potentialMoves[i].colors;
-                    cb.normalColor = firstPressed.colors.highlightedColor;
+                    cb.normalColor = firstPressed.colors.normalColor;
                     potentialMoves[i].colors = cb;
-                }
+                } 
+                
                 actionCount = 0;
                 currentTurn += 1;
                 UpdatePlayerTurn();
@@ -161,7 +162,7 @@ public class GameController : MonoBehaviour
     {
         string pieceType = currentPressed.GetComponentInChildren<Text>().text;
         int[] currentButtonCord = buttonMapping[currentPressed];
-        Debug.Log("current grid coord: " + currentButtonCord[0] + "," + currentButtonCord[1]);
+        //Debug.Log("current grid coord: " + currentButtonCord[0] + "," + currentButtonCord[1]);
         List<int[]> possibleMoves = new List<int[]>();
         List<Button> validMoves = new List<Button>();
         //all possible moves bc currently to lazy to write out a loop that finds them all 
@@ -197,7 +198,7 @@ public class GameController : MonoBehaviour
         int[] upLeftTwoCord = { currentButtonCord[0] - 2, currentButtonCord[1] + 2 };
         // 16 down left diag
         int[] downLeftTwoCord = { currentButtonCord[0] - 2, currentButtonCord[1] - 2 };
-        Debug.Log("generating valid moves");
+        //Debug.Log("generating valid moves");
         //these are always possible moves
         possibleMoves.Add(upCord);
         possibleMoves.Add(rightCord);
@@ -233,11 +234,6 @@ public class GameController : MonoBehaviour
             possibleMoves.Add(leftTwoCord);
             //Debug.Log("Current move list size " + possibleMoves.Count);   
         }
-        Debug.Log("possible move size list " + possibleMoves.Count);
-        for(int i = 0; i < possibleMoves.Count; i++)
-        {
-            Debug.Log("up cord " + possibleMoves[i][0] + "," + possibleMoves[i][1]);
-        }
         //asses if possible move is valid and adds to the valid list
         for (int i = 0; i < possibleMoves.Count; i++)
         {
@@ -245,42 +241,32 @@ public class GameController : MonoBehaviour
             {
                 if(possibleMoves[i][0] == cordKeys[x][0] && possibleMoves[i][1] == cordKeys[x][1])
                 {
-                    if (CheckIfEmpty(grid[cordKeys[x]]))
+                    int xDistance = (possibleMoves[i][0] - currentButtonCord[0]);
+                    int yDistance = (possibleMoves[i][1] - currentButtonCord[1]);
+                    if (xDistance < 0) xDistance = xDistance * -1;
+                    if (yDistance < 0) yDistance = yDistance * -1;
+                    if (xDistance == 2 || yDistance == 2)
+                    {
+                        Debug.Log("x: " + possibleMoves[i][0] + " y: " + possibleMoves[i][1]);
+                        int testx = possibleMoves[i][0] / 2;
+                        int testy = possibleMoves[i][1] / 2;
+                        Debug.Log("space in between x: " + testx + " y: " + testy); 
+                    }
+                    // the real condition if distrance x or y is 1 away from pressed coord and is empty add it to the list  
+                    if (CheckIfEmpty(grid[cordKeys[x]]) && (xDistance == 1 || yDistance == 1))
                     {
                         validMoves.Add(grid[cordKeys[x]]);
                     }
+                    //other conditon if x or y distance is two and the space between the two is occuipeid (not empty) then add it to the list 
                 }
             }
-            //Debug.Log("x: " + possibleMoves[i][0] + "y: " + possibleMoves[i][0]);
-          
         }
-        Debug.Log("Current valid move list size: " + validMoves.Count);
         return validMoves; 
     }
-    //when I become smarter I will write this 
-    /*public void generatePossibleMoves(List<int[]> possibleMoves, int[] currentCord, string piece)
-    {
-        if(piece == "T")
-        {
-
-        }
-        else
-        {
-
-        }
-    }*/
+  
     // set up a new board to play, may need to shift this to Start() once menu UI is put is in place 
     void Awake()
     {
-        Debug.Log("list is size is " + buttons.Count);
         BoardSetup(buttons);
-        Debug.Log("dict test " + grid.Count);
-        int[] test = { 0, 0 };
-        //Debug.Log("test name " + grid[test].name);
-        int[] test2 = { 0, 0 };
-        List<int> a = new List<int>() { 1 };
-        List<int> b = new List<int>() { 1 };
-        Debug.Log("Test " + test[0]+ "," + test[1]);
-        Debug.Log("cordKey " + cordKeys[0][0] + "," + cordKeys[0][1]);
     }
 }
