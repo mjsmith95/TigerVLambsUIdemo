@@ -13,8 +13,9 @@ public class GameController : MonoBehaviour
 
     public List<Button> buttons;
     public List<int[]> cordKeys = new List<int[]>();
-    public Dictionary<int[], Button> grid = new Dictionary<int[],Button>();
-    public Dictionary<Button, int[]> buttonMapping = new Dictionary<Button, int[]>();
+    private Dictionary<int[], Button> grid = new Dictionary<int[],Button>();
+    private Dictionary<Button, int[]> buttonMapping = new Dictionary<Button, int[]>();
+    public List<Button> potentialMoves = new List<Button>();
 
     public void BoardSetup(List<Button> buttonElments)
     {
@@ -78,7 +79,6 @@ public class GameController : MonoBehaviour
          * check if current is valid move, if yes then move 
          * if distance between current and valid is > 1 then capture 
          */
-        List<Button> potentialMoves = new List<Button>();
         if (actionCount == 0)
         {
             if (!CheckIfEmpty(currentPressed)) 
@@ -95,10 +95,25 @@ public class GameController : MonoBehaviour
                 actionCount += 1; 
             }
         }
+
         else if (actionCount == 1)
         {
-            if (CheckIfEmpty(currentPressed)) 
+            for (int i = 0; i < potentialMoves.Count; i++)
             {
+                Debug.Log("hit loop");
+                if (buttonMapping[potentialMoves[i]] == buttonMapping[currentPressed])
+                {
+                    Debug.Log("is valid move");
+                    break;
+                }
+                else
+                {
+                    Debug.Log("invalid move");
+                }
+            }
+
+            if (CheckIfEmpty(currentPressed))
+            {    
                 currentPressed.GetComponentInChildren<Text>().text = firstPressed.GetComponentInChildren<Text>().text;
                 // remove that same piece from the previous seelction
                 firstPressed.GetComponentInChildren<Text>().text = "";
@@ -109,12 +124,14 @@ public class GameController : MonoBehaviour
                     ColorBlock cb = potentialMoves[i].colors;
                     cb.normalColor = firstPressed.colors.normalColor;
                     potentialMoves[i].colors = cb;
-                } 
-                
+                }
+
                 actionCount = 0;
                 currentTurn += 1;
                 UpdatePlayerTurn();
+                
             }
+            
 
         }
     }
@@ -226,7 +243,7 @@ public class GameController : MonoBehaviour
             }
                // Debug.Log("Current move list size " + possibleMoves.Count);
         }
-        else if (pieceType == "T")
+        else if (pieceType == "T") // cant move diag but still tigger sop need to check for capture 
         {
             possibleMoves.Add(upTwoCord);
             possibleMoves.Add(rightTwoCord);
@@ -250,6 +267,8 @@ public class GameController : MonoBehaviour
                         Debug.Log("x: " + possibleMoves[i][0] + " y: " + possibleMoves[i][1]);
                         int testx = possibleMoves[i][0] / 2;
                         int testy = possibleMoves[i][1] / 2;
+                        //int indexTest = ( testx + 5) + testy;
+                        //Debug.Log("in between button: " + grid[cordKeys[indexTest]].name);  
                         Debug.Log("space in between x: " + testx + " y: " + testy); 
                     }
                     // the real condition if distrance x or y is 1 away from pressed coord and is empty add it to the list  
@@ -258,6 +277,10 @@ public class GameController : MonoBehaviour
                         validMoves.Add(grid[cordKeys[x]]);
                     }
                     //other conditon if x or y distance is two and the space between the two is occuipeid (not empty) then add it to the list 
+                    //else if ((xDistance == 2 || yDistance == 2) && CheckIfEmpty(grid))
+                    //{
+
+                    //}
                 }
             }
         }
